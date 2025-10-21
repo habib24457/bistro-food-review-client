@@ -26,6 +26,7 @@ const DailyMenu = () => {
     "Donnerstag",
     "Fritag",
   ];
+  const weekdays = tableHeader.slice(1);
 
   const mealOptions = [
     "Grill Sandwiches",
@@ -48,11 +49,36 @@ const DailyMenu = () => {
             <tr key={index}>
               <td>{option}</td>
 
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
+              <td>
+                <h5>Essen: </h5>
+                <button>Add</button>
+                <button>Update</button>
+                <button>⭐</button>
+              </td>
+              <td>
+                <h5>Essen: </h5>
+                <button>Add</button>
+                <button>Update</button>
+                <button>⭐</button>
+              </td>
+              <td>
+                <h5>Essen: </h5>
+                <button>Add</button>
+                <button>Update</button>
+                <button>⭐</button>
+              </td>
+              <td>
+                <h5>Essen: </h5>
+                <button>Add</button>
+                <button>Update</button>
+                <button>⭐</button>
+              </td>
+              <td>
+                <h5>Essen: </h5>
+                <button>Add</button>
+                <button>Update</button>
+                <button>⭐</button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getDailyMeals, getMealOptions } from "../../api";
+import axios from "axios";
 
 const DailyMenu = () => {
   const [meals, setMeals] = useState([]);
   const [mealOptions, setMealOptions] = useState([]);
-  const [mealNameInput, setMealNameInput] = useState({});
 
   useEffect(() => {
     fetchMeals();
@@ -15,7 +15,7 @@ const DailyMenu = () => {
     try {
       const response = await getDailyMeals();
       setMeals(response.data);
-      console.log("Fetched meals:", response.data);
+      //console.log("Fetched meals:", response.data);
     } catch (error) {
       console.error("Error fetching daily meals:", error);
     }
@@ -25,7 +25,7 @@ const DailyMenu = () => {
     try {
       const response = await getMealOptions();
       setMealOptions(response.data);
-      console.log("Fetched meal options:", response.data);
+      //console.log("Fetched meal options:", response.data);
     } catch (error) {
       console.error("Error fetching meal options:", error);
     }
@@ -41,19 +41,24 @@ const DailyMenu = () => {
   ];
   const weekdays = tableHeader.slice(1);
 
-  /*const mealOptions = [
-    "Grill Sandwiches",
-    "Smuts Leibspeise",
-    "Just Good Food",
-  ];*/
-
-  const handleAddMeal = (meal, option, day) => {
-    console.log("Updating meal:", meal);
-    console.log("Updating option:", option);
-    console.log("Updating day:", day);
-
+  const handleAddMeal = async (mealOption, day) => {
     const mealDate = getDateForWeekday(day);
-    console.log("Computed meal date:", mealDate);
+    const mealName = prompt(
+      `Enter meal name for ${mealOption.name} on ${day}:`
+    );
+    if (!mealName || mealName.trim() === "") return;
+    try {
+      await axios.put("http://localhost:5175/api/meal/editName", {
+        mealOptionId: mealOption.id,
+        mealDate: mealDate,
+        editedMealName: mealName,
+      });
+      console.log("Meal added successfully");
+      fetchMeals();
+    } catch (error) {
+      console.error("Failed to add meal:", error);
+      alert("Failed to add meal");
+    }
   };
 
   const getDateForWeekday = (weekdayName) => {
@@ -69,7 +74,7 @@ const DailyMenu = () => {
     };
 
     const today = new Date();
-    const todayDay = today.getDay(); // 0 = Sunday, 1 = Monday
+    const todayDay = today.getDay();
     const targetDay = weekdayMap[weekdayName];
 
     if (targetDay === undefined) {
@@ -86,7 +91,7 @@ const DailyMenu = () => {
   const handleUpdateMeal = (meal) => {};
   const handleRateMeal = async (meal) => {};
 
-  console.log("Meals state:", mealOptions);
+  console.log("Meals state:", meals);
 
   const WeeklyMenuTable = () => {
     return (
@@ -103,31 +108,16 @@ const DailyMenu = () => {
             <tr key={option.id}>
               <td>{option.name}</td>
               {weekdays.map((day, colIndex) => {
-                const meal = getMealForOptionAndDay(option.id, day);
-                const hasName = meal?.editedMealName?.trim() !== "";
-
                 return (
                   <td key={colIndex}>
-                    {!hasName && (
-                      <input
-                        type="text"
-                        placeholder="Enter meal name"
-                        value={mealNameInput[meal?.id] || ""}
-                        onChange={(e) =>
-                          setMealNameInput((prev) => ({
-                            ...prev,
-                            [meal?.id]: e.target.value,
-                          }))
-                        }
-                      />
-                    )}
-                    <button onClick={() => handleAddMeal(meal, option, day)}>
+                    <h4>{}</h4>
+                    <button onClick={() => handleAddMeal(option, day)}>
                       Add
                     </button>
-                    <button onClick={() => handleUpdateMeal(meal)}>
+                    <button onClick={() => handleUpdateMeal(option)}>
                       Update
                     </button>
-                    <button onClick={() => handleRateMeal(meal)}>⭐</button>
+                    <button onClick={() => handleRateMeal(option)}>⭐</button>
                   </td>
                 );
               })}
@@ -135,16 +125,6 @@ const DailyMenu = () => {
           ))}
         </tbody>
       </table>
-    );
-  };
-
-  const getMealForOptionAndDay = (optionName, dayName) => {
-    return meals.find(
-      (m) =>
-        m.mealOptionName.toLowerCase() === optionName.toLowerCase() &&
-        new Date(m.mealDate)
-          .toLocaleDateString("de-DE", { weekday: "long" })
-          .toLowerCase() === dayName.toLowerCase()
     );
   };
 

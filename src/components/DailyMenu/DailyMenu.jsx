@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { getDailyMeals, getMealOptions } from "../../api";
+import {
+  getDailyMenu,
+  getMealOptions,
+  editMealName,
+  getAllMeals,
+} from "../../api";
 import axios from "axios";
 
 const DailyMenu = () => {
   const [meals, setMeals] = useState([]);
+  const [dailyMenu, setDailyMenu] = useState([]);
   const [mealOptions, setMealOptions] = useState([]);
 
   useEffect(() => {
-    fetchMeals();
+    fetchDailyMenu();
     fetchMealOptions();
+    fetchAllMeals();
   }, []);
 
-  const fetchMeals = async () => {
+  const fetchDailyMenu = async () => {
     try {
-      const response = await getDailyMeals();
-      setMeals(response.data);
+      const response = await getDailyMenu();
+      setDailyMenu(response.data);
       //console.log("Fetched meals:", response.data);
     } catch (error) {
       console.error("Error fetching daily meals:", error);
@@ -31,6 +38,16 @@ const DailyMenu = () => {
     }
   };
 
+  const fetchAllMeals = async () => {
+    try {
+      const response = await getAllMeals();
+      setMeals(response.data);
+      console.log("Fetched all meals:", response.data);
+    } catch (error) {
+      console.error("Error fetching all meals:", error);
+    }
+  };
+
   const tableHeader = [
     "Beilage/Salat",
     "Montag",
@@ -41,20 +58,16 @@ const DailyMenu = () => {
   ];
   const weekdays = tableHeader.slice(1);
 
-  const handleAddMeal = async (mealOption, day) => {
+  const handleAddMeal = async (mealOption, day, mealId) => {
+    console.log("idididiidid", mealId);
     const mealDate = getDateForWeekday(day);
     const mealName = prompt(
       `Enter meal name for ${mealOption.name} on ${day}:`
     );
     if (!mealName || mealName.trim() === "") return;
     try {
-      await axios.put("http://localhost:5175/api/meal/editName", {
-        mealOptionId: mealOption.id,
-        mealDate: mealDate,
-        editedMealName: mealName,
-      });
+      await editMealName(mealId, mealOption.id, mealDate, mealName);
       console.log("Meal added successfully");
-      fetchMeals();
     } catch (error) {
       console.error("Failed to add meal:", error);
       alert("Failed to add meal");
@@ -108,14 +121,14 @@ const DailyMenu = () => {
             <tr key={option.id}>
               <td>{option.name}</td>
               {weekdays.map((day, colIndex) => {
+                //const mealForCell = getMealForMealOptionAndDay(option.id, day);
                 return (
                   <td key={colIndex}>
-                    <h4>{}</h4>
-                    <button onClick={() => handleAddMeal(option, day)}>
-                      Add
-                    </button>
-                    <button onClick={() => handleUpdateMeal(option)}>
-                      Update
+                    <h4>{"API is not integrated yet"}</h4>{" "}
+                    <button
+                      onClick={() => handleAddMeal(option, day, option.id)}
+                    >
+                      Add/Update
                     </button>
                     <button onClick={() => handleRateMeal(option)}>⭐</button>
                   </td>
@@ -127,6 +140,26 @@ const DailyMenu = () => {
       </table>
     );
   };
+
+  /*
+  const getMealForMealOptionAndDay = (mealOptionId, dayName) => {
+    console.log("optionId:", mealOptionId, "and day:", dayName);
+
+    const mealDate = getDateForWeekday(dayName);
+    console.log("Computed mealDate:", mealDate);
+    console.log(
+      "All meals available:",
+      meals.find((m) => m.mealOptionId === mealOptionId)
+    );
+
+    return meals.find((m) => {
+      const sameOption = m.mealOptionId === mealOptionId;
+      const sameDate =
+        new Date(m.date).toDateString() === mealDate.toDateString();
+
+      return sameOption && sameDate;
+    });
+  };*/
 
   return (
     <div>

@@ -5,12 +5,13 @@ import {
   editMealName,
   getAllMeals,
 } from "../../api";
-import axios from "axios";
 
 const DailyMenu = () => {
   const [meals, setMeals] = useState([]);
   const [dailyMenu, setDailyMenu] = useState([]);
   const [mealOptions, setMealOptions] = useState([]);
+  const [updateMealName, setUpdateMealName] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   const today = new Date().toLocaleDateString("de-DE", {
     weekday: "long",
     year: "numeric",
@@ -54,7 +55,15 @@ const DailyMenu = () => {
     }
   };
 
-  const handleUpdateMeal = async (todayMeal) => {};
+  const handleOnChange = (e, todayMeal) => {
+    console.log("----!!!Today meal for option in onChange", e.target.value);
+    //setUpdateMealName(e.target.value);
+  };
+
+  const handleUpdateMeal = async (meal) => {
+    setIsEditing(false);
+    console.log("Updating meal:", updateMealName);
+  };
 
   const handleRateMeal = async (todayMeal) => {
     console.log("Rating meal:", todayMeal);
@@ -91,11 +100,23 @@ const DailyMenu = () => {
                 <td>
                   {todayMeal ? (
                     <>
+                      {isEditing && (
+                        <input
+                          type="text"
+                          onChange={(e) => handleOnChange(e, todayMeal)}
+                        />
+                      )}
+
                       <span>{todayMeal?.editedMealName}</span>
+
                       <br />
-                      <button onClick={() => handleUpdateMeal(todayMeal)}>
-                        Update
-                      </button>
+                      {isEditing ? (
+                        <button onClick={() => handleUpdateMeal(todayMeal)}>
+                          Update
+                        </button>
+                      ) : (
+                        <button onClick={() => setIsEditing(true)}>Edit</button>
+                      )}
                       <button onClick={() => handleRateMeal(todayMeal)}>
                         ⭐
                       </button>
@@ -104,7 +125,7 @@ const DailyMenu = () => {
                     <>
                       <input
                         type="text"
-                        placeholder="Enter meal name"
+                        placeholder="Enter a new meal name"
                         onChange={(e) =>
                           setMeals((prev) => ({
                             ...prev,

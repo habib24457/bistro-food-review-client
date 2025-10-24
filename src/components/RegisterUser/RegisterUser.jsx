@@ -4,16 +4,11 @@ import axios from "axios";
 const RegisterUser = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [isCurrentUserAvailable, setIsCurrentUserAvailable] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const currentUser = localStorage.getItem("currentUser");
-    if (currentUser) {
-      setIsCurrentUserAvailable(true);
-      const user = JSON.parse(currentUser);
-      setCurrentUser(user);
-    }
+    const user = localStorage.getItem("currentUser");
+    if (user) setCurrentUser(JSON.parse(user));
   }, []);
 
   const handleRegister = async () => {
@@ -24,72 +19,57 @@ const RegisterUser = () => {
     try {
       const response = await axios.post(
         "http://localhost:5175/api/User/createUser",
-        {
-          firstName: firstName,
-          lastName: lastName,
-        }
+        { firstName, lastName }
       );
+
       localStorage.setItem("currentUser", JSON.stringify(response.data));
       setCurrentUser(response.data);
-      setIsCurrentUserAvailable(true);
-      console.log("Registering user:", response.data);
       alert(`User ${response.data.firstName} registered successfully!`);
-    } catch (error) {
-      console.error("Error registering user:", error);
+    } catch (err) {
+      console.error("Error registering user:", err);
+      alert("Registration failed. Check console for details.");
     }
   };
 
   const handleRemoveUser = async () => {
-    const userId = currentUser.id;
-    if (!userId) {
-      alert("No user to remove.");
-      setIsCurrentUserAvailable(false);
-      return;
-    }
+    if (!currentUser?.id) return;
 
     try {
-      const response = await axios.delete(
-        `http://localhost:5175/api/User/deleteUser/${userId}`
+      await axios.delete(
+        `http://localhost:5175/api/User/deleteUser/${currentUser.id}`
       );
       alert(`User ${currentUser.firstName} removed successfully!`);
-    } catch (error) {
-      console.error("Error removing user:", error);
+      localStorage.removeItem("currentUser");
+      setCurrentUser(null);
+    } catch (err) {
+      console.error("Error removing user:", err);
+      alert("Failed to remove user.");
     }
-
-    localStorage.removeItem("currentUser");
-    setIsCurrentUserAvailable(false);
-    setCurrentUser({});
   };
 
-  console.log("Current User from localStorage:", currentUser);
-
-  return (
-    <>
-      {isCurrentUserAvailable ? (
-        <div className="current-user">
-          <h3>
-            Welcome, {currentUser.firstName} {currentUser.lastName}!
-          </h3>
-          <button onClick={() => handleRemoveUser()}>Remove user</button>
-        </div>
-      ) : (
-        <div>
-          <input
-            type="text"
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <button onClick={handleRegister}>Register</button>
-        </div>
-      )}
-    </>
+  return currentUser ? (
+    <div className="current-user">
+      <h3>
+        Welcome, {currentUser.firstName} {currentUser.lastName}!
+      </h3>
+      <button onClick={handleRemoveUser}>Remove user</button>
+    </div>
+  ) : (
+    <div>
+      <input
+        type="text"
+        placeholder="First Name"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+      />
+      <button onClick={handleRegister}>Register</button>
+    </div>
   );
 };
 

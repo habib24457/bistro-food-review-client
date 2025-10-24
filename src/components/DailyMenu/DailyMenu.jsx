@@ -1,34 +1,30 @@
 import React, { useEffect, useState } from "react";
-import {
-  getDailyMenu,
-  getMealOptions,
-  editMealName,
-  getAllMeals,
-} from "../../api";
+import ModalWithInput from "../ModalWithInput/ModalWithInput";
+import { getDailyMenu, getMealOptions } from "../../api";
+import "./DailyMenu.css";
 
 const DailyMenu = () => {
-  const [meals, setMeals] = useState([]);
   const [dailyMenu, setDailyMenu] = useState([]);
   const [mealOptions, setMealOptions] = useState([]);
-  const [updateMealName, setUpdateMealName] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [inputMealData, setInputMealData] = useState({});
+
   const today = new Date().toLocaleDateString("de-DE", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
+  const tableHeader = ["Beilage/Salat", today];
 
   useEffect(() => {
     fetchDailyMenu();
     fetchMealOptions();
-    fetchAllMeals();
   }, []);
 
   const fetchDailyMenu = async () => {
     try {
       const response = await getDailyMenu();
-
       setDailyMenu(response.data);
       console.log("---------------Fetched daily menu:", response.data);
     } catch (error) {
@@ -45,24 +41,9 @@ const DailyMenu = () => {
     }
   };
 
-  const fetchAllMeals = async () => {
-    try {
-      const response = await getAllMeals();
-      setMeals(response.data);
-      console.log("Fetched all meals:", response.data);
-    } catch (error) {
-      console.error("Error fetching all meals:", error);
-    }
-  };
-
-  const handleOnChange = (e, todayMeal) => {
-    console.log("----!!!Today meal for option in onChange", e.target.value);
-    //setUpdateMealName(e.target.value);
-  };
-
-  const handleUpdateMeal = async (meal) => {
-    setIsEditing(false);
-    console.log("Updating meal:", updateMealName);
+  const handleUpdateMeal = (meal) => {
+    setInputMealData(meal);
+    setIsModalOpen(true);
   };
 
   const handleRateMeal = async (todayMeal) => {
@@ -72,9 +53,7 @@ const DailyMenu = () => {
 
   const handleAddMeal = async (option) => {};
 
-  const tableHeader = ["Beilage/Salat", today];
-
-  const WeeklyMenuTable = () => {
+  const DailyMenuTable = () => {
     return (
       <table border="1" cellPadding="10" style={{ borderCollapse: "collapse" }}>
         <thead>
@@ -89,54 +68,30 @@ const DailyMenu = () => {
             const todayMeal = dailyMenu.find(
               (meal) => meal.mealOptionId === option.id
             );
-            console.log(
-              "----!!!Today meal for option",
-              todayMeal?.editedMealName
-            );
 
             return (
               <tr key={option.id}>
                 <td>{option.name}</td>
                 <td>
                   {todayMeal ? (
-                    <>
-                      {isEditing && (
-                        <input
-                          type="text"
-                          onChange={(e) => handleOnChange(e, todayMeal)}
-                        />
-                      )}
-
-                      <span>{todayMeal?.editedMealName}</span>
-
-                      <br />
-                      {isEditing ? (
-                        <button onClick={() => handleUpdateMeal(todayMeal)}>
-                          Update
-                        </button>
-                      ) : (
-                        <button onClick={() => setIsEditing(true)}>Edit</button>
-                      )}
-                      <button onClick={() => handleRateMeal(todayMeal)}>
-                        ⭐
-                      </button>
-                    </>
+                    <span>{todayMeal?.editedMealName}</span>
                   ) : (
-                    <>
-                      <input
-                        type="text"
-                        placeholder="Enter a new meal name"
-                        onChange={(e) =>
-                          setMeals((prev) => ({
-                            ...prev,
-                            [option.id]: e.target.value,
-                          }))
-                        }
-                      />
-                      <br />
-                      <button onClick={() => handleAddMeal(option)}>Add</button>
-                    </>
+                    <span className="danger-text">Not Meal Added</span>
                   )}
+                </td>
+                <td>
+                  {todayMeal?.editedMealName ? (
+                    <button onClick={() => handleUpdateMeal(todayMeal)}>
+                      Update
+                    </button>
+                  ) : (
+                    <button onClick={() => handleAddMeal(option)}>
+                      Add new meal
+                    </button>
+                  )}
+                  <br />
+                  <br />
+                  <button onClick={() => handleRateMeal(todayMeal)}>⭐</button>
                 </td>
               </tr>
             );
@@ -149,7 +104,13 @@ const DailyMenu = () => {
   return (
     <div>
       <h2>Daily Menu</h2>
-      <WeeklyMenuTable />
+      <DailyMenuTable />
+      <ModalWithInput
+        isModalOpen={isModalOpen}
+        inputMealData={inputMealData}
+        setInputMealData={setInputMealData}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

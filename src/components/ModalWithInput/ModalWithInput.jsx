@@ -36,10 +36,6 @@ const ModalWithInput = ({
       const date = today.toISOString();
       const editedMealName = inputMealData?.editedMealName;
 
-      console.log("Meal Option ID:", mealOptionId);
-      console.log("Date:", date);
-      console.log("Edited Meal Name:", inputMealData?.editedMealName);
-
       const response = await axios.post(
         "http://localhost:5175/api/meal/createMeal",
         {

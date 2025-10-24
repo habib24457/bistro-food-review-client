@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ModalWithInput from "../ModalWithInput/ModalWithInput";
+import RegisterUser from "../RegisterUser/RegisterUser";
 import { getDailyMenu, getMealOptions } from "../../api";
 import "./DailyMenu.css";
 
@@ -115,6 +116,8 @@ const DailyMenu = () => {
   return (
     <div>
       <h2>Daily Menu</h2>
+      <RegisterUser />
+      <br />
       <DailyMenuTable />
       <ModalWithInput
         isModalOpen={isModalOpen}

@@ -7,7 +7,9 @@ const DailyMenu = () => {
   const [dailyMenu, setDailyMenu] = useState([]);
   const [mealOptions, setMealOptions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMealOption, setSelectedMealOption] = useState({});
   const [inputMealData, setInputMealData] = useState({});
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const today = new Date().toLocaleDateString("de-DE", {
     weekday: "long",
@@ -41,7 +43,18 @@ const DailyMenu = () => {
     }
   };
 
-  const handleUpdateMeal = (meal) => {
+  const handleUpdateMeal = (meal, mealOption) => {
+    console.log("-----Updating meal:----", meal, mealOption);
+    setIsEditMode(true);
+    setSelectedMealOption(mealOption);
+    setInputMealData(meal);
+    setIsModalOpen(true);
+  };
+
+  const handleAddMeal = (meal, mealOption) => {
+    console.log("-----Adding meal:----", meal, mealOption);
+    setIsEditMode(false);
+    setSelectedMealOption(mealOption);
     setInputMealData(meal);
     setIsModalOpen(true);
   };
@@ -50,8 +63,6 @@ const DailyMenu = () => {
     console.log("Rating meal:", todayMeal);
     // Implement rating functionality here
   };
-
-  const handleAddMeal = async (option) => {};
 
   const DailyMenuTable = () => {
     return (
@@ -81,11 +92,11 @@ const DailyMenu = () => {
                 </td>
                 <td>
                   {todayMeal?.editedMealName ? (
-                    <button onClick={() => handleUpdateMeal(todayMeal)}>
+                    <button onClick={() => handleUpdateMeal(todayMeal, option)}>
                       Update
                     </button>
                   ) : (
-                    <button onClick={() => handleAddMeal(option)}>
+                    <button onClick={() => handleAddMeal(todayMeal, option)}>
                       Add new meal
                     </button>
                   )}
@@ -110,6 +121,8 @@ const DailyMenu = () => {
         inputMealData={inputMealData}
         setInputMealData={setInputMealData}
         onClose={() => setIsModalOpen(false)}
+        selectedMealOption={selectedMealOption}
+        isEditMode={isEditMode}
       />
     </div>
   );

@@ -25,6 +25,7 @@ const TopMeals = () => {
       <table border="1" cellPadding="8" style={{ borderCollapse: "collapse" }}>
         <thead>
           <tr>
+            <th>Meal Option</th>
             <th>Meal Name</th>
             <th>Average Rating</th>
           </tr>
@@ -34,6 +35,7 @@ const TopMeals = () => {
             topMeals.map((meal) => (
               <tr key={meal?.date + meal?.mealOptionName}>
                 <td>{meal?.mealOptionName}</td>
+                <td> {meal?.editedMealName}</td>
                 <td>{meal?.averageRating.toFixed(2)}</td>
               </tr>
             ))

@@ -28,6 +28,8 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
       setCurrentUser(response.data);
       alert(`User ${response.data.firstName} registered successfully!`);
       getCurrentUsersRatingForMeal();
+      setFirstName("");
+      setLastName("");
     } catch (err) {
       console.error("Error registering user:", err);
       alert("Registration failed. Check console for details.");
@@ -45,11 +47,18 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
       setCurrentUser(null);
       localStorage.removeItem("currentUser");
       getCurrentUsersRatingForMeal();
-      //fetchDailyMenu();
+      setFirstName("");
+      setLastName("");
     } catch (err) {
       console.error("Error removing user:", err);
       alert("Failed to remove user.");
     }
+  };
+
+  const handleAddAnotherUser = () => {
+    setCurrentUser(null);
+    localStorage.removeItem("currentUser");
+    getCurrentUsersRatingForMeal();
   };
 
   return currentUser ? (
@@ -58,6 +67,9 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
         Welcome, {currentUser.firstName} {currentUser.lastName}!
       </h3>
       <Button text="Remove user" onClick={handleRemoveUser} />
+      <br />
+      <br />
+      <Button text="Add Another user" onClick={handleAddAnotherUser} />
     </div>
   ) : (
     <div className="current-user">

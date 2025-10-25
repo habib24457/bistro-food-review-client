@@ -35,7 +35,7 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
       alert("Registration failed. Check console for details.");
     }
   };
-
+  /*
   const handleRemoveUser = async () => {
     if (!currentUser?.id) return;
 
@@ -50,9 +50,40 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
       setFirstName("");
       setLastName("");
     } catch (err) {
+      localStorage.removeItem("currentUser");
       console.error("Error removing user:", err);
       alert("Failed to remove user.");
     }
+  };*/
+
+  const handleRemoveUser = async () => {
+    if (!currentUser?.id) {
+      localStorage.removeItem("currentUser");
+      setCurrentUser(null);
+      setFirstName("");
+      setLastName("");
+      alert("No user found locally. Cleared local session.");
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:5175/api/User/deleteUser/${currentUser.id}`
+      );
+      alert(`User ${currentUser.firstName} removed successfully!`);
+    } catch (err) {
+      console.warn(
+        "Delete failed, because user might not exist on server:",
+        err
+      );
+      alert("User not found in the system, clearing local session.");
+    }
+
+    localStorage.removeItem("currentUser");
+    setCurrentUser(null);
+    setFirstName("");
+    setLastName("");
+    getCurrentUsersRatingForMeal();
   };
 
   const handleAddAnotherUser = () => {

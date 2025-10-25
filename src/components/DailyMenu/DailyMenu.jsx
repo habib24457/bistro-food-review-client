@@ -25,7 +25,7 @@ const DailyMenu = () => {
     month: "long",
     day: "numeric",
   });
-  const tableHeader = ["Beilage/Salat", today];
+  const tableHeader = ["Beilage/Salat", today, "Actions"];
 
   useEffect(() => {
     fetchDailyMenu();

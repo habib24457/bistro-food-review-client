@@ -8,6 +8,7 @@ const Button = ({ text = "Click Me", onClick }) => {
     color: "#242323ff",
     border: "none",
     padding: "10px 20px",
+    margin: "5px",
     borderRadius: "6px",
     cursor: "pointer",
     fontSize: "16px",

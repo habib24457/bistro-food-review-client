@@ -11,3 +11,20 @@
   font-family: Arial, sans-serif;
   padding: 20px;
 }
+
+.daily-menu-container table {
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.daily-menu-container th,
+.daily-menu-container td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.daily-menu-container th {
+  background-color: #f2f2f2;
+}

@@ -78,8 +78,6 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
         Welcome, {currentUser.firstName} {currentUser.lastName}!
       </h2>
       <Button text="Remove user" onClick={handleRemoveUser} />
-      <br />
-      <br />
       <Button text="Add Another user" onClick={handleAddAnotherUser} />
     </div>
   ) : (

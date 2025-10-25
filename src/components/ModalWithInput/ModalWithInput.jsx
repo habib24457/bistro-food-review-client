@@ -59,10 +59,11 @@ const ModalWithInput = ({
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Edit Meal Name</h3>
+        <h3>{isEditMode ? "Edit Meal Name" : "Add New Meal"}</h3>{" "}
         <input
           type="text"
           placeholder="Enter meal name"
+          value={inputMealData.editedMealName || ""}
           onChange={(e) =>
             setInputMealData({
               ...inputMealData,

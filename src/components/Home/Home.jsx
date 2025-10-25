@@ -1,10 +1,10 @@
 import React from "react";
 import DailyMenu from "../DailyMenu/DailyMenu";
+import "./Home.css";
 
 const Home = () => {
   return (
-    <div>
-      <h1>Welcome to Bistro Food Review!</h1>
+    <div className="home-container">
       <DailyMenu />
     </div>
   );

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ModalWithInput from "../ModalWithInput/ModalWithInput";
+import StarRatingForm from "../StarRatingModal/StarRatingModal";
 import RegisterUser from "../RegisterUser/RegisterUser";
 import { getDailyMenu, getMealOptions } from "../../api";
+import axios from "axios";
 import "./DailyMenu.css";
 
 const DailyMenu = () => {
@@ -11,6 +13,9 @@ const DailyMenu = () => {
   const [selectedMealOption, setSelectedMealOption] = useState({});
   const [inputMealData, setInputMealData] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isStarModalOpen, setIsStarModalOpen] = useState(false);
+  const [selectedMealForRating, setSelectedMealForRating] = useState(null);
+  const [mealRating, setMealRating] = useState([]);
 
   const today = new Date().toLocaleDateString("de-DE", {
     weekday: "long",
@@ -21,15 +26,16 @@ const DailyMenu = () => {
   const tableHeader = ["Beilage/Salat", today];
 
   useEffect(() => {
+    console.log("-----rating----", mealRating);
     fetchDailyMenu();
     fetchMealOptions();
+    getCurrentUsersRatingForMeal();
   }, []);
 
   const fetchDailyMenu = async () => {
     try {
       const response = await getDailyMenu();
-      setDailyMenu(response.data);
-      console.log("---------------Fetched daily menu:", response.data);
+      setDailyMenu(response?.data);
     } catch (error) {
       console.error("Error fetching daily meals:", error);
     }
@@ -38,14 +44,31 @@ const DailyMenu = () => {
   const fetchMealOptions = async () => {
     try {
       const response = await getMealOptions();
-      setMealOptions(response.data);
+      setMealOptions(response?.data);
     } catch (error) {
       console.error("Error fetching meal options:", error);
     }
   };
 
+  const getCurrentUsersRatingForMeal = async () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUserId = currentUser?.id;
+    if (!currentUserId) {
+      alert("Please register or login to rate the meal.");
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:5175/api/User/userWithRatings/${currentUserId}`
+      );
+      console.log("User ratings response:", response?.data?.ratings);
+      setMealRating(response?.data?.ratings || []);
+    } catch (error) {
+      console.error("Error fetching user's rating for meal:", error);
+    }
+  };
+
   const handleUpdateMeal = (meal, mealOption) => {
-    console.log("-----Updating meal:----", meal, mealOption);
     setIsEditMode(true);
     setSelectedMealOption(mealOption);
     setInputMealData(meal);
@@ -53,16 +76,16 @@ const DailyMenu = () => {
   };
 
   const handleAddMeal = (meal, mealOption) => {
-    console.log("-----Adding meal:----", meal, mealOption);
     setIsEditMode(false);
     setSelectedMealOption(mealOption);
     setInputMealData(meal);
     setIsModalOpen(true);
   };
 
-  const handleRateMeal = async (todayMeal) => {
-    console.log("Rating meal:", todayMeal);
-    // Implement rating functionality here
+  const handleRateMeal = (todayMeal) => {
+    //console.log("Rating meal:", todayMeal);
+    setSelectedMealForRating(todayMeal);
+    setIsStarModalOpen(true);
   };
 
   const DailyMenuTable = () => {
@@ -86,7 +109,15 @@ const DailyMenu = () => {
                 <td>{option.name}</td>
                 <td>
                   {todayMeal ? (
-                    <span>{todayMeal?.editedMealName}</span>
+                    <p>
+                      <span>{todayMeal?.editedMealName}</span>
+                      <br />
+                      <span>
+                        Rating:
+                        {mealRating.find((r) => r.mealId === todayMeal.id)
+                          ?.stars || 0}
+                      </span>
+                    </p>
                   ) : (
                     <span className="danger-text">Not Meal Added</span>
                   )}
@@ -116,7 +147,9 @@ const DailyMenu = () => {
   return (
     <div>
       <h2>Daily Menu</h2>
-      <RegisterUser />
+      <RegisterUser
+        getCurrentUsersRatingForMeal={getCurrentUsersRatingForMeal}
+      />
       <br />
       <DailyMenuTable />
       <ModalWithInput
@@ -126,6 +159,13 @@ const DailyMenu = () => {
         onClose={() => setIsModalOpen(false)}
         selectedMealOption={selectedMealOption}
         isEditMode={isEditMode}
+        fetchDailyMenu={fetchDailyMenu}
+      />
+      <StarRatingForm
+        isStarModalOpen={isStarModalOpen}
+        onClose={() => setIsStarModalOpen(false)}
+        selectedMealForRating={selectedMealForRating}
+        getCurrentUsersRatingForMeal={getCurrentUsersRatingForMeal}
       />
     </div>
   );

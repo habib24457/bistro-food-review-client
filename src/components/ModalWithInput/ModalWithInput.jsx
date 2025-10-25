@@ -9,18 +9,18 @@ const ModalWithInput = ({
   onClose,
   selectedMealOption,
   isEditMode,
+  fetchDailyMenu,
 }) => {
   const handleUpdateSubmit = async () => {
     try {
       const { id, editedMealName } = inputMealData;
-      //console.log("Updated Meal Name:", id, editedMealName);
-
       const response = await axios.put(
         `http://localhost:5175/api/meal/editName/${id}`,
         { editedMealName }
       );
 
       console.log("Meal updated successfully:", response.data);
+      if (fetchDailyMenu) await fetchDailyMenu();
       onClose();
     } catch (error) {
       console.error("Error updating meal:", error);
@@ -46,14 +46,13 @@ const ModalWithInput = ({
       );
       console.log("Meal added successfully:", response.data);
       alert("Meal added successfully!");
+      if (fetchDailyMenu) await fetchDailyMenu();
       onClose();
     } catch (error) {
       console.error("Failed to add meal:", error);
       alert("Failed to add meal");
     }
   };
-
-  console.log("Modal inputMealData:", selectedMealOption);
 
   if (!isModalOpen) return null;
 

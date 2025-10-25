@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const RegisterUser = () => {
+const RegisterUser = ({ getCurrentUsersRatingForMeal }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
@@ -25,6 +25,7 @@ const RegisterUser = () => {
       localStorage.setItem("currentUser", JSON.stringify(response.data));
       setCurrentUser(response.data);
       alert(`User ${response.data.firstName} registered successfully!`);
+      getCurrentUsersRatingForMeal();
     } catch (err) {
       console.error("Error registering user:", err);
       alert("Registration failed. Check console for details.");
@@ -41,6 +42,7 @@ const RegisterUser = () => {
       alert(`User ${currentUser.firstName} removed successfully!`);
       localStorage.removeItem("currentUser");
       setCurrentUser(null);
+      getCurrentUsersRatingForMeal();
     } catch (err) {
       console.error("Error removing user:", err);
       alert("Failed to remove user.");

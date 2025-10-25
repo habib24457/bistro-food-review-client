@@ -35,26 +35,6 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
       alert("Registration failed. Check console for details.");
     }
   };
-  /*
-  const handleRemoveUser = async () => {
-    if (!currentUser?.id) return;
-
-    try {
-      await axios.delete(
-        `http://localhost:5175/api/User/deleteUser/${currentUser.id}`
-      );
-      alert(`User ${currentUser.firstName} removed successfully!`);
-      setCurrentUser(null);
-      localStorage.removeItem("currentUser");
-      getCurrentUsersRatingForMeal();
-      setFirstName("");
-      setLastName("");
-    } catch (err) {
-      localStorage.removeItem("currentUser");
-      console.error("Error removing user:", err);
-      alert("Failed to remove user.");
-    }
-  };*/
 
   const handleRemoveUser = async () => {
     if (!currentUser?.id) {

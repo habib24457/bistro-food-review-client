@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ModalWithInput from "../ModalWithInput/ModalWithInput";
 import StarRatingForm from "../StarRatingModal/StarRatingModal";
 import RegisterUser from "../RegisterUser/RegisterUser";
@@ -17,6 +17,7 @@ const DailyMenu = () => {
   const [isStarModalOpen, setIsStarModalOpen] = useState(false);
   const [selectedMealForRating, setSelectedMealForRating] = useState(null);
   const [mealRating, setMealRating] = useState([]);
+  const hasAlerted = useRef(false);
 
   const today = new Date().toLocaleDateString("de-DE", {
     weekday: "long",
@@ -53,9 +54,10 @@ const DailyMenu = () => {
   const getCurrentUsersRatingForMeal = async () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const currentUserId = currentUser?.id;
-    if (!currentUserId) {
+    if (!currentUserId && !hasAlerted.current) {
       setMealRating([]);
       alert("Please register or login to rate the meal.");
+      hasAlerted.current = true;
       return;
     }
     try {

@@ -1,4 +1,3 @@
-import { baseApiurl } from "../../api";
 import "./ModalWithInput.css";
 import axios from "axios";
 import api from "../../api";

@@ -30,6 +30,9 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
    i. Open ModalWithInput.jsx  
    ii. remove line: 22-24 which takes the endpoint from api.js.  
    iii. and uncomment line: 18-22, here the endpoint is hard coded.
+
+   (Note: Same api mismatch can happen with current user. For that, please check: DailyMenu.jsx, Remove line: 67. And uncomment: 64-66)
+
 2. How to rate a meal?
 
 - To rate a meal, you must be registered to the database as current user.

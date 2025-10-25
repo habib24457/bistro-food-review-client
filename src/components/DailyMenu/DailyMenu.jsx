@@ -4,8 +4,8 @@ import StarRatingForm from "../StarRatingModal/StarRatingModal";
 import RegisterUser from "../RegisterUser/RegisterUser";
 import { getDailyMenu, getMealOptions } from "../../api";
 import Button from "../SharedComponents/Button";
-import axios from "axios";
 import "./DailyMenu.css";
+import api from "../../api";
 
 const DailyMenu = () => {
   const [dailyMenu, setDailyMenu] = useState([]);
@@ -61,9 +61,10 @@ const DailyMenu = () => {
       return;
     }
     try {
-      const response = await axios.get(
+      /*const response = await axios.get(
         `http://localhost:5175/api/User/userWithRatings/${currentUserId}`
-      );
+      );*/
+      const response = await api.get(`/User/userWithRatings/${currentUserId}`);
       console.log("User ratings response:", response?.data?.ratings);
       setMealRating(response?.data?.ratings || []);
     } catch (error) {

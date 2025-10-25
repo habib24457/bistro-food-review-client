@@ -9,8 +9,9 @@ const NavigationBar = () => {
         Home
       </Link>
       <Link className="nav-button" to="/top-meals">
-        Top Meals
+        Top-Meals
       </Link>
+      <h2 className="nav-text">Bistro Food Review</h2>
     </div>
   );
 };

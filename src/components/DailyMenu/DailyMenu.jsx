@@ -3,6 +3,7 @@ import ModalWithInput from "../ModalWithInput/ModalWithInput";
 import StarRatingForm from "../StarRatingModal/StarRatingModal";
 import RegisterUser from "../RegisterUser/RegisterUser";
 import { getDailyMenu, getMealOptions } from "../../api";
+import Button from "../SharedComponents/Button";
 import axios from "axios";
 import "./DailyMenu.css";
 
@@ -26,7 +27,6 @@ const DailyMenu = () => {
   const tableHeader = ["Beilage/Salat", today];
 
   useEffect(() => {
-    console.log("-----rating----", mealRating);
     fetchDailyMenu();
     fetchMealOptions();
     getCurrentUsersRatingForMeal();
@@ -83,7 +83,6 @@ const DailyMenu = () => {
   };
 
   const handleRateMeal = (todayMeal) => {
-    //console.log("Rating meal:", todayMeal);
     setSelectedMealForRating(todayMeal);
     setIsStarModalOpen(true);
   };
@@ -114,7 +113,7 @@ const DailyMenu = () => {
                       <br />
                       <span>
                         Rating:
-                        {mealRating.find((r) => r.mealId === todayMeal.id)
+                        {mealRating.find((r) => r?.mealId === todayMeal?.id)
                           ?.stars || 0}
                       </span>
                     </p>
@@ -124,13 +123,15 @@ const DailyMenu = () => {
                 </td>
                 <td>
                   {todayMeal?.editedMealName ? (
-                    <button onClick={() => handleUpdateMeal(todayMeal, option)}>
-                      Update
-                    </button>
+                    <Button
+                      text="Update Meal"
+                      onClick={() => handleUpdateMeal(todayMeal, option)}
+                    />
                   ) : (
-                    <button onClick={() => handleAddMeal(todayMeal, option)}>
-                      Add new meal
-                    </button>
+                    <Button
+                      text="Add new meal"
+                      onClick={() => handleAddMeal(todayMeal, option)}
+                    />
                   )}
                   <br />
                   <br />
@@ -145,8 +146,8 @@ const DailyMenu = () => {
   };
 
   return (
-    <div>
-      <h2>Daily Menu</h2>
+    <div className="daily-menu-container">
+      <h2>Menu of: {today}</h2>
       <RegisterUser
         getCurrentUsersRatingForMeal={getCurrentUsersRatingForMeal}
       />

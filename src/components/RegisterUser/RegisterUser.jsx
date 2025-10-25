@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./RegisterUser.css";
+import Button from "../SharedComponents/Button";
 
 const RegisterUser = ({ getCurrentUsersRatingForMeal }) => {
   const [firstName, setFirstName] = useState("");
@@ -54,23 +56,28 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal }) => {
       <h3>
         Welcome, {currentUser.firstName} {currentUser.lastName}!
       </h3>
-      <button onClick={handleRemoveUser}>Remove user</button>
+      <Button text="Remove user" onClick={handleRemoveUser} />
     </div>
   ) : (
-    <div>
+    <div className="current-user">
       <input
+        className="input-design"
         type="text"
         placeholder="First Name"
         value={firstName}
         onChange={(e) => setFirstName(e.target.value)}
       />
       <input
+        className="input-design"
         type="text"
         placeholder="Last Name"
         value={lastName}
         onChange={(e) => setLastName(e.target.value)}
       />
-      <button onClick={handleRegister}>Register</button>
+      {/* <button className="button-design" onClick={handleRegister}>
+        Register
+      </button> */}
+      <Button text="Register" onClick={handleRegister} />
     </div>
   );
 };

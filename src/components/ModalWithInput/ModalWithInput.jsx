@@ -1,6 +1,7 @@
 import { baseApiurl } from "../../api";
 import "./ModalWithInput.css";
 import axios from "axios";
+import api from "../../api";
 
 const ModalWithInput = ({
   isModalOpen,
@@ -14,10 +15,13 @@ const ModalWithInput = ({
   const handleUpdateSubmit = async () => {
     try {
       const { id, editedMealName } = inputMealData;
-      const response = await axios.put(
-        `http://localhost:5175/api/meal/editName/${id}`,
-        { editedMealName }
-      );
+      /*const response = await axios.put(
+         `http://localhost:5175/api/meal/editName/${id}`,
+         { editedMealName }
+       );*/
+      const response = await api.put(`/meal/editName/${id}`, {
+        editedMealName,
+      });
 
       console.log("Meal updated successfully:", response.data);
       if (fetchDailyMenu) await fetchDailyMenu();

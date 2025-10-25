@@ -4,8 +4,8 @@ const Button = ({ text = "Click Me", onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const baseStyle = {
-    backgroundColor: "#858788ff",
-    color: "#fff",
+    backgroundColor: "#d3d5d5ff",
+    color: "#242323ff",
     border: "none",
     padding: "10px 20px",
     borderRadius: "6px",
@@ -15,7 +15,8 @@ const Button = ({ text = "Click Me", onClick }) => {
   };
 
   const hoverStyle = {
-    backgroundColor: "#0056b3",
+    backgroundColor: "#616162ff",
+    color: "#faf5f5ff",
     transform: "scale(1.03)",
   };
 

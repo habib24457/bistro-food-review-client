@@ -14,9 +14,6 @@ const StarRatingForm = ({
 
   const handleSubmit = async () => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
-    console.log("User:", user?.id);
-    console.log("Rating for meal:", selectedMealForRating?.id);
-    console.log("Submitted rating:", rating);
     if (!user) return alert("Please register first");
     if (!rating) return;
     try {

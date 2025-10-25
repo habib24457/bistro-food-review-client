@@ -54,6 +54,7 @@ const DailyMenu = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const currentUserId = currentUser?.id;
     if (!currentUserId) {
+      setMealRating([]);
       alert("Please register or login to rate the meal.");
       return;
     }
@@ -150,6 +151,7 @@ const DailyMenu = () => {
       <h2>Menu of: {today}</h2>
       <RegisterUser
         getCurrentUsersRatingForMeal={getCurrentUsersRatingForMeal}
+        fetchDailyMenu={fetchDailyMenu}
       />
       <br />
       <DailyMenuTable />

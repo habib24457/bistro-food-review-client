@@ -3,7 +3,7 @@ import axios from "axios";
 import "./RegisterUser.css";
 import Button from "../SharedComponents/Button";
 
-const RegisterUser = ({ getCurrentUsersRatingForMeal }) => {
+const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
@@ -42,9 +42,10 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal }) => {
         `http://localhost:5175/api/User/deleteUser/${currentUser.id}`
       );
       alert(`User ${currentUser.firstName} removed successfully!`);
-      localStorage.removeItem("currentUser");
       setCurrentUser(null);
+      localStorage.removeItem("currentUser");
       getCurrentUsersRatingForMeal();
+      //fetchDailyMenu();
     } catch (err) {
       console.error("Error removing user:", err);
       alert("Failed to remove user.");
@@ -74,9 +75,6 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal }) => {
         value={lastName}
         onChange={(e) => setLastName(e.target.value)}
       />
-      {/* <button className="button-design" onClick={handleRegister}>
-        Register
-      </button> */}
       <Button text="Register" onClick={handleRegister} />
     </div>
   );

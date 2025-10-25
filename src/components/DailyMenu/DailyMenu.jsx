@@ -119,7 +119,7 @@ const DailyMenu = () => {
                       </span>
                     </p>
                   ) : (
-                    <span className="danger-text">Not Meal Added</span>
+                    <span className="danger-text">No Meal Added</span>
                   )}
                 </td>
                 <td>

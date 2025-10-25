@@ -74,9 +74,9 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
 
   return currentUser ? (
     <div className="current-user">
-      <h3>
+      <h2>
         Welcome, {currentUser.firstName} {currentUser.lastName}!
-      </h3>
+      </h2>
       <Button text="Remove user" onClick={handleRemoveUser} />
       <br />
       <br />

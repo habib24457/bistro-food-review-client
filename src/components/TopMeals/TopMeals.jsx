@@ -34,9 +34,13 @@ const TopMeals = () => {
           {topMeals.length > 0 ? (
             topMeals.map((meal) => (
               <tr key={meal?.date + meal?.mealOptionName}>
-                <td>{meal?.mealOptionName}</td>
-                <td> {meal?.editedMealName}</td>
-                <td>{meal?.averageRating.toFixed(2)}</td>
+                <td>{meal?.mealOptionName || "N/A"}</td>
+                <td>{meal?.editedMealName || "N/A"}</td>
+                <td>
+                  {meal?.averageRating != null
+                    ? meal.averageRating.toFixed(2)
+                    : "N/A"}
+                </td>
               </tr>
             ))
           ) : (

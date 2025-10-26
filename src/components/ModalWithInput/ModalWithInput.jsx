@@ -1,5 +1,4 @@
 import "./ModalWithInput.css";
-import axios from "axios";
 import api from "../../api";
 
 const ModalWithInput = ({
@@ -13,7 +12,12 @@ const ModalWithInput = ({
 }) => {
   const handleUpdateSubmit = async () => {
     try {
-      const { id, editedMealName } = inputMealData;
+      const { id, editedMealName } = inputMealData || {};
+      if (!editedMealName || !editedMealName.trim()) {
+        alert("Meal name cannot be empty.");
+        return;
+      }
+
       /*const response = await axios.put(
          `http://localhost:5175/api/meal/editName/${id}`,
          { editedMealName }
@@ -22,7 +26,7 @@ const ModalWithInput = ({
         editedMealName,
       });
 
-      console.log("Meal updated successfully:", response.data);
+      console.log("Meal updated successfully:", response?.data);
       if (fetchDailyMenu) await fetchDailyMenu();
       onClose();
     } catch (error) {
@@ -38,15 +42,16 @@ const ModalWithInput = ({
       const today = new Date();
       const date = today.toISOString();
       const editedMealName = inputMealData?.editedMealName;
+      if (!editedMealName || !editedMealName.trim()) {
+        alert("Meal name cannot be empty.");
+        return;
+      }
 
-      const response = await axios.post(
-        "http://localhost:5175/api/meal/createMeal",
-        {
-          mealOptionId,
-          date,
-          editedMealName,
-        }
-      );
+      const response = await api.post("/meal/createMeal", {
+        mealOptionId,
+        date,
+        editedMealName,
+      });
       console.log("Meal added successfully:", response.data);
       alert("Meal added successfully!");
       if (fetchDailyMenu) await fetchDailyMenu();
@@ -66,7 +71,7 @@ const ModalWithInput = ({
         <input
           type="text"
           placeholder="Enter meal name"
-          value={inputMealData.editedMealName || ""}
+          value={inputMealData?.editedMealName || ""}
           onChange={(e) =>
             setInputMealData({
               ...inputMealData,

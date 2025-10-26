@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./RegisterUser.css";
 import Button from "../SharedComponents/Button";
@@ -7,10 +7,26 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const hasAlerted = useRef(false);
 
   useEffect(() => {
     const user = localStorage.getItem("currentUser");
-    if (user) setCurrentUser(JSON.parse(user));
+    if (user) {
+      axios
+        .get(`http://localhost:5175/api/User/userWithRatings/${user?.id}`)
+        .then(() => setCurrentUser(JSON.parse(user)))
+        .catch(() => {
+          // if the user doesn't exist anymore in DB, remove from localStorage
+          localStorage.removeItem("currentUser");
+          setCurrentUser(null);
+          if (!hasAlerted.current) {
+            alert(
+              "Your user account was removed from DB. Please register again."
+            );
+            hasAlerted.current = true;
+          }
+        });
+    }
   }, []);
 
   const handleRegister = async () => {

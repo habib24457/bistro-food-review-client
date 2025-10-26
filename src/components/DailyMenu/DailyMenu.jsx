@@ -56,7 +56,7 @@ const DailyMenu = () => {
     const currentUserId = currentUser?.id;
     if (!currentUserId && !hasAlerted.current) {
       setMealRating([]);
-      alert("Please register or login to rate the meal.");
+      alert("Please register to rate the meal.");
       hasAlerted.current = true;
       return;
     }
@@ -104,7 +104,7 @@ const DailyMenu = () => {
         <tbody>
           {mealOptions.map((option) => {
             const todayMeal = dailyMenu.find(
-              (meal) => meal.mealOptionId === option.id
+              (meal) => meal?.mealOptionId === option?.id
             );
 
             return (

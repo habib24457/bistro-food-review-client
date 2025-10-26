@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import "./RegisterUser.css";
 import Button from "../SharedComponents/Button";
+import api from "../../api";
 
 const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
   const [firstName, setFirstName] = useState("");
@@ -10,18 +10,19 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
   const hasAlerted = useRef(false);
 
   useEffect(() => {
-    const user = localStorage.getItem("currentUser");
-    if (user) {
-      axios
-        .get(`http://localhost:5175/api/User/userWithRatings/${user?.id}`)
-        .then(() => setCurrentUser(JSON.parse(user)))
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      api
+        .get(`/User/userWithRatings/${parsedUser.id}`)
+        .then(() => setCurrentUser(parsedUser))
         .catch(() => {
           // if the user doesn't exist anymore in DB, remove from localStorage
           localStorage.removeItem("currentUser");
           setCurrentUser(null);
           if (!hasAlerted.current) {
             alert(
-              "Your user account was removed from DB. Please register again."
+              "❌ Your user account was removed from DB. Please register again."
             );
             hasAlerted.current = true;
           }
@@ -31,24 +32,24 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
 
   const handleRegister = async () => {
     if (!firstName.trim() || !lastName.trim()) {
-      alert("Please enter both first name and last name.");
+      alert("⚠️ Please enter both first name and last name.");
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:5175/api/User/createUser",
-        { firstName, lastName }
-      );
+      const response = await api.post("/User/createUser", {
+        firstName,
+        lastName,
+      });
 
       localStorage.setItem("currentUser", JSON.stringify(response.data));
       setCurrentUser(response.data);
-      alert(`User ${response.data.firstName} registered successfully!`);
+      alert(`✅ User ${response.data.firstName} registered successfully!`);
       getCurrentUsersRatingForMeal();
       setFirstName("");
       setLastName("");
     } catch (err) {
       console.error("Error registering user:", err);
-      alert("Registration failed. Check console for details.");
+      alert("❌ Registration failed. Check console for details.");
     }
   };
 
@@ -58,21 +59,19 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
       setCurrentUser(null);
       setFirstName("");
       setLastName("");
-      alert("No user found locally. Cleared local session.");
+      alert("❌ No user found locally. Cleared local session.");
       return;
     }
 
     try {
-      await axios.delete(
-        `http://localhost:5175/api/User/deleteUser/${currentUser.id}`
-      );
-      alert(`User ${currentUser.firstName} removed successfully!`);
+      await api.delete(`/User/deleteUser/${currentUser.id}`);
+      alert(`✅ User ${currentUser.firstName} removed successfully!`);
     } catch (err) {
       console.warn(
         "Delete failed, because user might not exist on server:",
         err
       );
-      alert("User not found in the system, clearing local session.");
+      alert("❌ User not found in the system, clearing local session.");
     }
 
     localStorage.removeItem("currentUser");

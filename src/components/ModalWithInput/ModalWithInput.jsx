@@ -14,7 +14,7 @@ const ModalWithInput = ({
     try {
       const { id, editedMealName } = inputMealData || {};
       if (!editedMealName || !editedMealName.trim()) {
-        alert("Meal name cannot be empty.");
+        alert("⚠️ Meal name cannot be empty.");
         return;
       }
 
@@ -25,13 +25,13 @@ const ModalWithInput = ({
       const response = await api.put(`/meal/editName/${id}`, {
         editedMealName,
       });
-
+      alert("✅ Meal name updated successfully!");
       console.log("Meal updated successfully:", response?.data);
       if (fetchDailyMenu) await fetchDailyMenu();
       onClose();
     } catch (error) {
       console.error("Error updating meal:", error);
-      alert("Failed to update the meal name");
+      alert("❌ Failed to update the meal name");
     }
     onClose();
   };
@@ -43,7 +43,7 @@ const ModalWithInput = ({
       const date = today.toISOString();
       const editedMealName = inputMealData?.editedMealName;
       if (!editedMealName || !editedMealName.trim()) {
-        alert("Meal name cannot be empty.");
+        alert("⚠️ Meal name cannot be empty.");
         return;
       }
 
@@ -53,12 +53,12 @@ const ModalWithInput = ({
         editedMealName,
       });
       console.log("Meal added successfully:", response.data);
-      alert("Meal added successfully!");
+      alert("✅Meal added successfully!");
       if (fetchDailyMenu) await fetchDailyMenu();
       onClose();
     } catch (error) {
       console.error("Failed to add meal:", error);
-      alert("Failed to add meal");
+      alert("❌ Failed to add meal");
     }
   };
 

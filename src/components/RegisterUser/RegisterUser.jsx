@@ -82,6 +82,9 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
   };
 
   const handleAddAnotherUser = () => {
+    alert(
+      "ℹ️ Adding a new user will only remove the current user from browser's local storage, but it will persist in the DB with ratings."
+    );
     setCurrentUser(null);
     localStorage.removeItem("currentUser");
     getCurrentUsersRatingForMeal();
@@ -93,7 +96,7 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
         Welcome, {currentUser.firstName} {currentUser.lastName}!
       </h2>
       <Button text="Remove user" onClick={handleRemoveUser} />
-      <Button text="Add Another user" onClick={handleAddAnotherUser} />
+      <Button text="Add a new user" onClick={handleAddAnotherUser} />
     </div>
   ) : (
     <div className="current-user">

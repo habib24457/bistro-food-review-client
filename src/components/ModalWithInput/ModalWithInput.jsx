@@ -53,7 +53,7 @@ const ModalWithInput = ({
         editedMealName,
       });
       console.log("Meal added successfully:", response.data);
-      alert("✅Meal added successfully!");
+      alert("✅ Meal added successfully!");
       if (fetchDailyMenu) await fetchDailyMenu();
       onClose();
     } catch (error) {

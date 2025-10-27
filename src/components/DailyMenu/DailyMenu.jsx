@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import ModalWithInput from "../ModalWithInput/ModalWithInput";
-import StarRatingForm from "../StarRatingModal/StarRatingModal";
+import StarRatingModal from "../StarRatingModal/StarRatingModal";
 import RegisterUser from "../RegisterUser/RegisterUser";
 import { getDailyMenu, getMealOptions } from "../../api";
 import Button from "../SharedComponents/Button";
@@ -167,7 +167,7 @@ const DailyMenu = () => {
         isEditMode={isEditMode}
         fetchDailyMenu={fetchDailyMenu}
       />
-      <StarRatingForm
+      <StarRatingModal
         isStarModalOpen={isStarModalOpen}
         onClose={() => setIsStarModalOpen(false)}
         selectedMealForRating={selectedMealForRating}

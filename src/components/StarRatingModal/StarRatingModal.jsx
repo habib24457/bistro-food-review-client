@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import api from "../../api";
 import "./StarRatingModal.css";
 import axios from "axios";
 
-const StarRatingForm = ({
+const StarRatingModal = ({
   isStarModalOpen,
   onClose,
   selectedMealForRating,
@@ -17,16 +18,13 @@ const StarRatingForm = ({
     if (!user) return alert("Please register first");
     if (!rating) return;
     try {
-      const response = await axios.post(
-        "http://localhost:5175/api/Rating/saveRating",
-        {
-          userId: user?.id,
-          mealId: selectedMealForRating?.id,
-          stars: rating,
-        }
-      );
-      console.log("Rating submitted successfully:", response.data);
-      alert("Rating submitted successfully!");
+      const response = await api.post("/Rating/saveRating", {
+        userId: user?.id,
+        mealId: selectedMealForRating?.id,
+        stars: rating,
+      });
+      console.log(" Rating submitted successfully:", response.data);
+      alert("✅ Rating submitted successfully!");
       getCurrentUsersRatingForMeal();
     } catch (error) {
       console.error("Error submitting rating:", error?.response?.data);
@@ -68,4 +66,4 @@ const StarRatingForm = ({
   );
 };
 
-export default StarRatingForm;
+export default StarRatingModal;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import api from "../../api";
 import "./StarRatingModal.css";
-import axios from "axios";
 
 const StarRatingModal = ({
   isStarModalOpen,

@@ -54,6 +54,10 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
   };
 
   const handleRemoveUser = async () => {
+    alert(
+      "ℹ️ This will remove the user from local storage and from the database."
+    );
+
     if (!currentUser?.id) {
       localStorage.removeItem("currentUser");
       setCurrentUser(null);

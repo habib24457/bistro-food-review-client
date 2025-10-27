@@ -57,7 +57,7 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
 
 - One user can only, rate a meal once a day. So for testing purpose, if you want to rate the same meal again, you have to register as a new user.
 
-- You can register as a new user by clicking the 'Add new user' button. This will remove the current user from local storage, but the information will be in the db. And it will allow you to register as a new user, so that you can rate the meals again for testing.
+- You can register as a new user by clicking the 'Add new user' button. This will remove the current user from local storage, but the information (current user and the ratings) will remain saved in the db. And it will allow you to register as a new user, so that you can rate the meals again for testing.
 
 3. How to check the top meal?
 

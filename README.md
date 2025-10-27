@@ -1,6 +1,8 @@
 # How to run the react app ?
 
-!!Note: Make sure your BistroFoodReview.Api is already running locally on the endpoint: http://localhost:5175/api
+!!Note: Make sure your BistroFoodReview.Api is already running locally on the endpoint: http://localhost:5175/api.
+
+-And make sure you have seeded the database with initial seeding. Because to start testing, you need the MealOptions in the database already.
 
 - In case your BistroFoodReview.Api is running in a different port. go to the api.js file, where endpoints are exported for all the frontend components.
 
@@ -33,8 +35,9 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
          { editedMealName }
    ```
 
-   -I have exported the api endpoints from one single js file, so that it can be updated easily for the whole project. But in case, the edit meal name endpoint fails due to mismatched api endpoint name. Please, go to ->  
-    i. Open ModalWithInput.jsx
+   Note: I have exported the api endpoints from one single js file, so that it can be updated easily from one place for the whole project. But in case, the edit meal name endpoint fails due to mismatched api endpoint name. Please, go to ->
+
+   i. Open ModalWithInput.jsx
 
    ii. remove line: 22-24 which takes the endpoint from api.js.
 
@@ -44,7 +47,7 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
 
 2. How to rate a meal?
 
-- To rate a meal, you must be registered to the database as current user.
+- To rate a meal, you must be registered user to the database as current user.
 
 - Once you registerd to the database, your current user id, and name is stored in the browser's local storage as well.
 
@@ -54,7 +57,7 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
 
 - One user can only, rate a meal once a day. So for testing purpose, if you want to rate the same meal again, you have to register as a new user.
 
-- You can register as a new user by clicking the 'Add Another User' button. This will remove the current user from local storage, but the information will be in the db. And it will allow you to register as a new user, so that you can rate the meals again for testing.
+- You can register as a new user by clicking the 'Add new user' button. This will remove the current user from local storage, but the information will be in the db. And it will allow you to register as a new user, so that you can rate the meals again for testing.
 
 3. How to check the top meal?
 

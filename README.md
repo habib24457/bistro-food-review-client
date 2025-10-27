@@ -22,7 +22,7 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
 
 ---
 
-#How to test the frontend?
+# How to test the frontend?
 
 -If there are meals saved for today's date. You will see the meals by matching with the meal option in the table. If there is not meal added to the database, you will have the option to add meal.
 
@@ -61,7 +61,11 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
 
 3. How to check the top meal?
 
-- On the navigation bar, by clicking the Top-Meals button, will show you the top meals with average ratings.
+-On the navigation bar, by clicking the Top-Meals button
+
+- Top Meal table will show the top ranked meal based on average star ratings.
+
+- This table will not only show today's meals but also all the meals available in the DB.
 
 - React router is used for redirecting to the TopMeals component.
 

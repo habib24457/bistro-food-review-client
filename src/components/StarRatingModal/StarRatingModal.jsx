@@ -26,7 +26,6 @@ const StarRatingModal = ({
       alert("✅ Rating submitted successfully!");
       getCurrentUsersRatingForMeal();
     } catch (error) {
-      console.error("Error submitting rating:", error?.response?.data);
       let message = "Submission failed.";
 
       if (typeof error.response?.data === "string") {

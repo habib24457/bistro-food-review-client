@@ -108,8 +108,8 @@ const DailyMenu = () => {
             );
 
             return (
-              <tr key={option.id}>
-                <td>{option.name}</td>
+              <tr key={option?.id}>
+                <td>{option?.name}</td>
                 <td>
                   {todayMeal ? (
                     <p>

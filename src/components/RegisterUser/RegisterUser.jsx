@@ -10,10 +10,14 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
   const hasAlerted = useRef(false);
 
   useEffect(() => {
+    checkIfUserExists();
+  }, []);
+
+  const checkIfUserExists = async () => {
     const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      api
+      await api
         .get(`/User/userWithRatings/${parsedUser.id}`)
         .then(() => setCurrentUser(parsedUser))
         .catch(() => {
@@ -28,7 +32,7 @@ const RegisterUser = ({ getCurrentUsersRatingForMeal, fetchDailyMenu }) => {
           }
         });
     }
-  }, []);
+  };
 
   const handleRegister = async () => {
     if (!firstName.trim() || !lastName.trim()) {

@@ -61,7 +61,9 @@ If it doesn’t, manually open your browser and go to http://localhost:3000.
 
 3. How to check the top meal?
 
--On the navigation bar, by clicking the Top-Meals button
+- On the navigation bar, by clicking the Top-Meals button.
+
+- In this table, all the meals are shown. Not only the meals for today, rather all the saved meals in db.
 
 - Top Meal table will show the top ranked meal based on average star ratings.
 
